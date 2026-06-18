@@ -44,13 +44,35 @@
   </div>
 
   <button
-    (click)="enrollRequested.emit(course.id)">
-    Enroll
+    (click)="toggleEnrollment()">
+
+    {{
+      enrollmentService.isEnrolled(course.id)
+        ? 'Unenroll'
+        : 'Enroll'
+    }}
+
   </button>
 
   <button
     (click)="isExpanded = !isExpanded">
-    Show Details
+
+    {{ isExpanded ? 'Hide Details' : 'Show Details' }}
+
   </button>
+
+  <div *ngIf="isExpanded">
+
+    <hr>
+
+    <p>
+      Course ID: {{ course.id }}
+    </p>
+
+    <p>
+      Grade Status: {{ course.gradeStatus }}
+    </p>
+
+  </div>
 
 </div>

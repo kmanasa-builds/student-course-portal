@@ -4,22 +4,23 @@
 
 <p>Total Courses: {{ courses.length }}</p>
 
-<ng-template #noCourses>
-  <p>No courses available.</p>
-</ng-template>
+<hr>
 
-<div *ngIf="!isLoading && courses.length > 0; else noCourses">
+<div *ngFor="let course of courses; trackBy: trackByCourseId">
 
   <app-course-card
     appHighlight="lightblue"
-    *ngFor="let course of courses; trackBy: trackByCourseId"
     [course]="course"
     (enrollRequested)="onEnroll($event)">
   </app-course-card>
 
+  <hr>
+
 </div>
 
 <p *ngIf="selectedCourseId">
+
   Selected Course ID :
   {{ selectedCourseId }}
+
 </p>
