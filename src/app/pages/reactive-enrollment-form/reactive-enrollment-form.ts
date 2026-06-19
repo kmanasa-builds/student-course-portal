@@ -13,6 +13,7 @@ import {
 
 @Component({
   selector: 'app-reactive-enrollment-form',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './reactive-enrollment-form.html',
   styleUrl: './reactive-enrollment-form.css'
@@ -126,9 +127,7 @@ export class ReactiveEnrollmentForm {
               emailTaken: true
             });
 
-          }
-
-          else {
+          } else {
 
             resolve(null);
 
@@ -145,6 +144,12 @@ export class ReactiveEnrollmentForm {
   onSubmit() {
 
     console.log(this.enrollForm.value);
+
+    alert(
+      'Enrollment submitted successfully!'
+    );
+
+    this.enrollForm.markAsPristine();
 
   }
 

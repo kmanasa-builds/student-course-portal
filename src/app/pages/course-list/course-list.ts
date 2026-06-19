@@ -1,32 +1,36 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 
-import { CourseCard } from '../../components/course-card/course-card';
-import { Highlight } from '../../directives/highlight';
-
-import { CourseService } from '../../services/course';
 import { Course } from '../../models/course.model';
+import { CourseService } from '../../services/course';
 
 @Component({
   selector: 'app-course-list',
   standalone: true,
   imports: [
     CommonModule,
-    CourseCard,
-    Highlight
+    FormsModule
   ],
   templateUrl: './course-list.html',
   styleUrl: './course-list.css'
 })
-export class CourseList implements OnInit {
-
-  isLoading = true;
+export class CourseListComponent implements OnInit {
 
   courses: Course[] = [];
 
-  selectedCourseId: number = 0;
+  isLoading = true;
 
-  constructor(private courseService: CourseService) {}
+  selectedCourseId: number | null = null;
+
+  searchTerm = '';
+
+  constructor(
+    private courseService: CourseService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
 
@@ -36,17 +40,43 @@ export class CourseList implements OnInit {
       this.isLoading = false;
     }, 1500);
 
+    this.searchTerm =
+      this.route.snapshot.queryParamMap.get('search') || '';
+
   }
 
-  trackByCourseId(index: number, course: any) {
-    return course.id;
-  }
+  onEnroll(courseId: number): void {
 
-  onEnroll(courseId: number) {
-
-    console.log('Enrolling course :', courseId);
+    console.log('Enrolling in course:', courseId);
 
     this.selectedCourseId = courseId;
+
+  }
+
+  trackByCourseId(index: number, course: Course): number {
+
+    return course.id;
+
+  }
+
+  goToCourse(id: number): void {
+
+    this.router.navigate(
+      ['courses', id]
+    );
+
+  }
+
+  searchCourse(): void {
+
+    this.router.navigate(
+      ['courses'],
+      {
+        queryParams: {
+          search: this.searchTerm
+        }
+      }
+    );
 
   }
 

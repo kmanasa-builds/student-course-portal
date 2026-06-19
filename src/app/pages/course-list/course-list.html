@@ -1,26 +1,58 @@
+<h1>Course List</h1>
+
+<hr>
+
+<div>
+
+  <input
+    type="text"
+    placeholder="Search course..."
+    [(ngModel)]="searchTerm">
+
+  <button (click)="searchCourse()">
+    Search
+  </button>
+
+</div>
+
+<br>
+
 <div *ngIf="isLoading">
   <p>Loading courses...</p>
 </div>
 
-<p>Total Courses: {{ courses.length }}</p>
+<div *ngIf="!isLoading; else noCourses">
 
-<hr>
+  <div
+    *ngFor="let course of courses; trackBy: trackByCourseId"
+    style="
+    border:1px solid gray;
+    padding:15px;
+    margin-bottom:15px;
+    cursor:pointer"
+    (click)="goToCourse(course.id)"
+  >
 
-<div *ngFor="let course of courses; trackBy: trackByCourseId">
+    <h3>{{course.name}}</h3>
 
-  <app-course-card
-    appHighlight="lightblue"
-    [course]="course"
-    (enrollRequested)="onEnroll($event)">
-  </app-course-card>
+    <p>Code : {{course.code}}</p>
 
-  <hr>
+    <p>Credits : {{course.credits}}</p>
+
+    <p>Status : {{course.gradeStatus}}</p>
+
+  </div>
 
 </div>
 
+<ng-template #noCourses>
+
+  <p>No courses available.</p>
+
+</ng-template>
+
+<hr>
+
 <p *ngIf="selectedCourseId">
-
-  Selected Course ID :
-  {{ selectedCourseId }}
-
+  Selected Course ID : {{selectedCourseId}}
 </p>
