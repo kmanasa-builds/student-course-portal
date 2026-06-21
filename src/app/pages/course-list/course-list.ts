@@ -3,8 +3,17 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { Observable } from 'rxjs';
+
+import { Store } from '@ngrx/store';
+
 import { Course } from '../../models/course.model';
-import { CourseService } from '../../services/course';
+
+import { loadCourses } from '../../store/course/course.actions';
+
+import {
+  selectAllCourses
+} from '../../store/course/course.selectors';
 
 @Component({
   selector: 'app-course-list',
@@ -18,75 +27,23 @@ import { CourseService } from '../../services/course';
 })
 export class CourseListComponent implements OnInit {
 
-  courses: Course[] = [];
+  courses$!: Observable<Course[]>;
 
   searchTerm = '';
 
   selectedCourseId: number | null = null;
 
-  isLoading = true;
-
-  errorMessage = '';
-
   constructor(
-    private courseService: CourseService,
+    private store: Store,
     private router: Router
   ) {}
 
   ngOnInit(): void {
 
-    this.loadCourses();
+    this.courses$ =
+      this.store.select(selectAllCourses);
 
-  }
-
-  loadCourses(): void {
-
-    this.courseService.getCourses().subscribe({
-
-      next: (courses: Course[]) => {
-
-        this.courses = courses;
-
-      },
-
-      error: (err: Error) => {
-
-        this.errorMessage = err.message;
-
-      },
-
-      complete: () => {
-
-        this.isLoading = false;
-
-      }
-
-    });
-
-  }
-
-  searchCourse(): void {
-
-    if (this.searchTerm.trim() === '') {
-
-      this.loadCourses();
-
-      return;
-
-    }
-
-    this.courseService.getCourses().subscribe({
-
-      next: (courses: Course[]) => {
-
-        this.courses = courses.filter(course =>
-          course.name.toLowerCase()
-            .includes(this.searchTerm.toLowerCase())
-        );
-
-      }
-
-    });
+    this.store.dispatch(loadCourses());
 
   }
 

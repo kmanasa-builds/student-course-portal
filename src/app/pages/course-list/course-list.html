@@ -9,7 +9,7 @@
     placeholder="Search course..."
     [(ngModel)]="searchTerm">
 
-  <button (click)="searchCourse()">
+  <button>
     Search
   </button>
 
@@ -17,42 +17,32 @@
 
 <br>
 
-<div *ngIf="isLoading">
-  <p>Loading courses...</p>
-</div>
-
-<div *ngIf="!isLoading; else noCourses">
+<div>
 
   <div
-    *ngFor="let course of courses; trackBy: trackByCourseId"
+    *ngFor="let course of courses$ | async; trackBy: trackByCourseId"
     style="
-    border:1px solid gray;
-    padding:15px;
-    margin-bottom:15px;
-    cursor:pointer"
+      border:1px solid gray;
+      padding:15px;
+      margin-bottom:15px;
+      cursor:pointer"
     (click)="goToCourse(course.id)"
   >
 
-    <h3>{{course.name}}</h3>
+    <h3>{{ course.name }}</h3>
 
-    <p>Code : {{course.code}}</p>
+    <p>Code : {{ course.code }}</p>
 
-    <p>Credits : {{course.credits}}</p>
+    <p>Credits : {{ course.credits }}</p>
 
-    <p>Status : {{course.gradeStatus}}</p>
+    <p>Status : {{ course.gradeStatus }}</p>
 
   </div>
 
 </div>
 
-<ng-template #noCourses>
-
-  <p>No courses available.</p>
-
-</ng-template>
-
 <hr>
 
 <p *ngIf="selectedCourseId">
-  Selected Course ID : {{selectedCourseId}}
+  Selected Course ID : {{ selectedCourseId }}
 </p>
