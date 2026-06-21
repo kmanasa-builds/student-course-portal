@@ -15,12 +15,23 @@ export class StudentProfile implements OnInit {
 
   enrolledCourses: Course[] = [];
 
-  constructor(private enrollmentService: EnrollmentService) {}
+  constructor(
+    private enrollmentService: EnrollmentService
+  ) {}
 
   ngOnInit(): void {
 
-    this.enrolledCourses =
-      this.enrollmentService.getEnrolledCourses();
+    this.enrollmentService.getEnrolledCourses().subscribe({
+
+      next: courses => {
+        this.enrolledCourses = courses;
+      },
+
+      error: err => {
+        console.error(err);
+      }
+
+    });
 
   }
 

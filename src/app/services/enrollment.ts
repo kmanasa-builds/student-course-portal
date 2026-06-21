@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable, forkJoin, of } from 'rxjs';
 import { Course } from '../models/course.model';
 import { CourseService } from './course';
 
@@ -32,11 +33,17 @@ export class EnrollmentService {
 
   }
 
-  getEnrolledCourses(): Course[] {
+  getEnrolledCourses(): Observable<Course[]> {
 
-    return this.enrolledCourseIds
-      .map(id => this.courseService.getCourseById(id))
-      .filter(course => course !== undefined) as Course[];
+    if (this.enrolledCourseIds.length === 0) {
+      return of([]);
+    }
+
+    return forkJoin(
+      this.enrolledCourseIds.map(id =>
+        this.courseService.getCourseById(id)
+      )
+    );
 
   }
 

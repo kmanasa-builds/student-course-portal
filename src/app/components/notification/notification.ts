@@ -7,11 +7,12 @@ import { NotificationService } from '../../services/notification';
   imports: [],
   templateUrl: './notification.html',
   styleUrl: './notification.css',
-
   providers: [NotificationService]
 })
-export class Notification {
+export class NotificationComponent {
 
-  constructor(public notificationService: NotificationService) {}
+  constructor(
+    public notificationService: NotificationService
+  ) {}
 
 }

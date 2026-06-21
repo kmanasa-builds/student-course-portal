@@ -1,20 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { Course } from '../../models/course.model';
 import { CourseService } from '../../services/course';
 
 @Component({
   selector: 'app-course-summary-widget',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './course-summary-widget.html',
   styleUrl: './course-summary-widget.css'
 })
-export class CourseSummaryWidget {
+export class CourseSummaryWidgetComponent implements OnInit {
 
   totalCourses = 0;
 
-  constructor(private courseService: CourseService) {
+  constructor(
+    private courseService: CourseService
+  ) {}
 
-    this.totalCourses = this.courseService.getCourses().length;
+  ngOnInit(): void {
+
+    this.courseService.getCourses().subscribe({
+
+      next: (courses: Course[]) => {
+        this.totalCourses = courses.length;
+      }
+
+    });
 
   }
 

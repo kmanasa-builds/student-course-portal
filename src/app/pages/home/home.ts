@@ -1,56 +1,32 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
-import { CourseSummaryWidget } from '../../components/course-summary-widget/course-summary-widget';
-import { Notification } from '../../components/notification/notification';
+import { CourseSummaryWidgetComponent } from '../../components/course-summary-widget/course-summary-widget';
+import { NotificationComponent } from '../../components/notification/notification';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
+    CommonModule,
     FormsModule,
     RouterLink,
-    CourseSummaryWidget,
-    Notification
+    CourseSummaryWidgetComponent,
+    NotificationComponent
   ],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
-export class Home implements OnInit, OnDestroy {
+export class HomeComponent {
 
   portalName = 'Student Course Portal';
 
-  isPortalActive = true;
+  availableCourses = 5;
 
-  message = '';
+  message = 'Explore and enroll in courses.';
 
   searchTerm = '';
-
-  availableCourses = 12;
-
-  ngOnInit(): void {
-
-    this.availableCourses = 12;
-
-    console.log(
-      'HomeComponent initialized — courses loaded'
-    );
-
-  }
-
-  ngOnDestroy(): void {
-
-    console.log(
-      'HomeComponent destroyed'
-    );
-
-  }
-
-  onEnrollClick(): void {
-
-    this.message = 'Enrollment opened!';
-
-  }
 
 }

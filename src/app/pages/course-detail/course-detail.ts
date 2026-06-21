@@ -1,24 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { CommonModule, JsonPipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
-import { Course } from '../../models/course.model';
 import { CourseService } from '../../services/course';
 
 @Component({
   selector: 'app-course-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, JsonPipe],
   templateUrl: './course-detail.html',
   styleUrl: './course-detail.css'
 })
 export class CourseDetailComponent implements OnInit {
 
-  course?: Course;
+  course: any = null;
 
   constructor(
     private route: ActivatedRoute,
-    private courseService: CourseService
+    private courseService: CourseService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -27,11 +27,23 @@ export class CourseDetailComponent implements OnInit {
       this.route.snapshot.paramMap.get('id')
     );
 
-    console.log('Course ID:', id);
+    this.courseService.getCourseById(id).subscribe({
 
-    this.course = this.courseService.getCourseById(id);
+      next: (data) => {
 
-    console.log('Course:', this.course);
+        this.course = data;
+
+        this.cdr.detectChanges();
+
+      },
+
+      error: (err) => {
+
+        console.error(err);
+
+      }
+
+    });
 
   }
 
